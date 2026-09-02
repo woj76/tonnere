@@ -495,10 +495,8 @@ set_global_assignment -name VHDL_FILE components/sdram_statemachine.vhdl
 set_global_assignment -name VHDL_FILE components/syncreset_enable_divider.vhd
 set_global_assignment -name VHDL_FILE a8core/pokey.vhdl
 set_global_assignment -name VHDL_FILE a8core/cpu.vhd
-set_global_assignment -name VHDL_FILE a8core/atari5200core.vhd
 set_global_assignment -name VHDL_FILE a8core/wide_delay_line.vhdl
 set_global_assignment -name VHDL_FILE a8core/pia.vhdl
-set_global_assignment -name VHDL_FILE a8core/atari800core_simple_sdram.vhd
 set_global_assignment -name VHDL_FILE a8core/simple_counter.vhdl
 set_global_assignment -name VHDL_FILE a8core/reg_file.vhdl
 set_global_assignment -name VHDL_FILE a8core/pokey_countdown_timer.vhdl
