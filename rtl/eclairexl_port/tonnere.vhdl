@@ -612,6 +612,7 @@ architecture vhdl of tonnere is
   signal rdy : std_logic;
   signal an : std_logic_vector(2 downto 0);
   signal mmu_io_vbxe : std_logic;
+  signal mmu_io_covox : std_logic;
 
   -- video settings (from STM32 VIDEO register)
   signal pal : std_logic;
@@ -907,6 +908,7 @@ PORTA_gen:
   ---------------------------------------------------------------------------
   pbi_disable <= antic_turbo when speed_6502="000001" else '1';
   mmu_io_vbxe <= '1' when VBXE_SWITCH = '1' and pbi_addr(15 downto 5) = "1101"&"011"&VBXE_REG_BASE&"010" else '0';
+  mmu_io_covox <= '1' when PM_COVOX_D6_MIRROR = '1' and pbi_addr(15 downto 2) = x"D6"&"000000" else '0';
 
   bus_adaptor : entity work.pbi6502
     PORT MAP (
@@ -914,7 +916,7 @@ PORTA_gen:
       RESET_N => RESET_N and SDRAM_RESET_N and not(reset_atari),
       ENABLE_179_EARLY => enable_179_early,
       REQUEST => pbi_request,
-      MMU_IO_INT => mmu_io_vbxe,
+      MMU_IO_INT => mmu_io_vbxe or mmu_io_covox,
       ADDR_IN => pbi_addr,
       DATA_IN => pbi_write_data(7 downto 0),
       WRITE_IN => pbi_write_enable,
@@ -1144,6 +1146,7 @@ PORTA_gen:
       RDY_OUT => RDY,
       AN_OUT => AN,
       POKEYMAX_CONFIG => POKEYMAX_CONFIG,
+      PM_COVOX_D6_MIRROR => PM_COVOX_D6_MIRROR,
       KEYBOARD_RESPONSE => KEYBOARD_RESPONSE,
       KEYBOARD_SCAN => KEYBOARD_SCAN,
       POT_IN => POT_IN,
