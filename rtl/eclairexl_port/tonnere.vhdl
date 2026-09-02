@@ -441,6 +441,10 @@ architecture vhdl of tonnere is
   signal vbxe_vram_request_complete : std_logic;
   signal vbxe_vram_extra_cycle : std_logic;
 
+  -- PokeyMax config
+  signal POKEYMAX_CONFIG : STD_LOGIC_VECTOR(38 downto 0);
+  signal PM_COVOX_D6_MIRROR : STD_LOGIC;
+
   -- pokey keyboard
   SIGNAL KEYBOARD_SCAN : std_logic_vector(5 downto 0);
   SIGNAL KEYBOARD_RESPONSE : std_logic_vector(1 downto 0);
@@ -632,7 +636,7 @@ architecture vhdl of tonnere is
   -- video via ddr out (to HDMI pins)
   signal DDIO_OUT : std_logic_vector(7 downto 0);
 
-  signal state_reg_out : std_logic_vector(1 downto 0);
+  signal state_reg_out : std_logic_vector(2 downto 0);
   signal memory_ready_antic_out : STD_LOGIC;
   signal memory_ready_cpu_out : STD_LOGIC;
   signal shared_enable_out : STD_LOGIC;
@@ -1069,6 +1073,31 @@ PORTA_gen:
   VBXE_PALETTE_INDEX <= (others => '0'); -- which color to update
   VBXE_PALETTE_COLOR <= (others => '0'); -- 7bit color value
 
+  -- PokeyMax default config (later to be user provided)
+  POKEYMAX_CONFIG <= 
+     "001" -- 38:36 Mix sel2
+    &"000" -- 35:33 Mix sel1
+    &"01" -- 32:31 PSG stereo
+    &"0" -- 30 PSG envelope
+    &"00" -- 29:28 PSG volume
+    &"00" -- 27:26 PSG freq
+    &"010" -- 25:23 SID2 filter
+    &"010" -- 22:20 SID1 filter
+    &"1" -- 19 Covox restrict
+    &"1" -- 18 PSG restrict
+    &"1" -- 17 SID restrict
+    &"11" -- 16:15 Pokey restrict
+    &"0" -- 14 Pokey IRQs
+    &"1" -- 13 Pokey volume
+    &"0" -- 12 Pokey channel mode
+    &"10" -- 11:10 ADC/SIO in vol
+    &"11" -- 9:8 GTIA mix
+    &"1010" -- 7:4, post-divide (L+R)
+    &"11" -- 3:2, L+R channel enabled
+    &"1" -- 1, mono detect
+    &"1"; -- 0, global enable
+  PM_COVOX_D6_MIRROR <= '1';
+
   ---------------------------------------------------------------------------
   -- FULL ATARI CORE
   ---------------------------------------------------------------------------
@@ -1078,8 +1107,7 @@ PORTA_gen:
       video_bits => 8,
       palette => 0,
       internal_ram => GENERIC_INTERNAL_RAM,
-      freezer_debug => 1,
-      sid => GENERIC_SID
+      freezer_debug => 1
     )
     PORT MAP (
       CLK => CLK,
@@ -1115,6 +1143,7 @@ PORTA_gen:
       IRQ_N_OUT => IRQ_N,
       RDY_OUT => RDY,
       AN_OUT => AN,
+      POKEYMAX_CONFIG => POKEYMAX_CONFIG,
       KEYBOARD_RESPONSE => KEYBOARD_RESPONSE,
       KEYBOARD_SCAN => KEYBOARD_SCAN,
       POT_IN => POT_IN,
