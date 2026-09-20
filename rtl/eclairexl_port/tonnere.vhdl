@@ -426,7 +426,7 @@ architecture vhdl of tonnere is
   -- VBXE config
   signal VBXE_SWITCH : STD_LOGIC;
   signal VBXE_REG_BASE : STD_LOGIC;
-  signal VBXE_NTSC_FIX : STD_LOGIC;
+  signal VBXE_VER_127 : STD_LOGIC;
   signal VBXE_TURBO : STD_LOGIC;
   signal VBXE_PALETTE_RGB : STD_LOGIC_VECTOR(2 downto 0);
   signal VBXE_PALETTE_INDEX : STD_LOGIC_VECTOR(7 downto 0);
@@ -1062,7 +1062,7 @@ PORTA_gen:
   -- VBXE config, TODO from the user / MCU
   VBXE_SWITCH <= '1'; -- Enable/Disable VBXE
   VBXE_REG_BASE <= '0'; -- D6/D7
-  VBXE_NTSC_FIX <= '0'; -- Fix the off by 1 scanline bug for NTSC in VBXE (coming revisions of VBXE might have this fixed permanently)
+  VBXE_VER_127 <= '1'; -- Emulate VBXE core version 1.26 (0) or 1.27 (1)
   VBXE_TURBO <= '0'; -- Fast blitter (use all possible VRAM cycles)
 
   VBXE_PALETTE_RGB <= "000"; -- set 1 on each component for particular palette wren
@@ -1084,6 +1084,7 @@ PORTA_gen:
     PORT MAP (
       CLK => CLK,
       RESET_N => RESET_N and SDRAM_RESET_N and not(reset_atari),
+      POWER_RESET => '0', -- use this to indicate that it is a power cycle reset rather than a key press one
       VIDEO_VS => VIDEO_VS,
       VIDEO_HS => VIDEO_HS,
       VIDEO_CS => VIDEO_CS,
@@ -1164,7 +1165,7 @@ PORTA_gen:
       RAM_WRITE_ENABLE => RAM_WRITE_ENABLE,
       VBXE_SWITCH => VBXE_SWITCH,
       VBXE_REG_BASE => VBXE_REG_BASE,
-      VBXE_NTSC_FIX => VBXE_NTSC_FIX,
+      VBXE_VER_127 => VBXE_VER_127,
       VBXE_TURBO => VBXE_TURBO,
       VBXE_PALETTE_RGB => VBXE_PALETTE_RGB,
       VBXE_PALETTE_INDEX => VBXE_PALETTE_INDEX,
