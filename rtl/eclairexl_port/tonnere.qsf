@@ -500,6 +500,7 @@ set_global_assignment -name VHDL_FILE a8core/pia.vhdl
 set_global_assignment -name VHDL_FILE a8core/simple_counter.vhdl
 set_global_assignment -name VHDL_FILE a8core/reg_file.vhdl
 set_global_assignment -name VHDL_FILE a8core/pokey_countdown_timer.vhdl
+set_global_assignment -name VHDL_FILE a8core/gtia_priority_store.vhdl
 set_global_assignment -name VHDL_FILE a8core/gtia_priority.vhdl
 set_global_assignment -name VHDL_FILE a8core/gtia_player.vhdl
 set_global_assignment -name VHDL_FILE a8core/antic_counter.vhdl
