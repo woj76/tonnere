@@ -568,7 +568,10 @@ architecture vhdl of tonnere is
   -- scandoubler
   signal half_scandouble_enable_reg : std_logic;
   signal half_scandouble_enable_next : std_logic;
-  signal ATARI_COLOUR : std_logic_vector(7 downto 0);
+  signal GTIA_COLOUR : std_logic_vector(7 downto 0);
+  signal COLOUR_R : std_logic_vector(7 downto 0);
+  signal COLOUR_G : std_logic_vector(7 downto 0);
+  signal COLOUR_B : std_logic_vector(7 downto 0);
 
   -- freezer
   signal freezer_enable : std_logic;
@@ -1008,7 +1011,9 @@ PORTA_gen:
       hsync_in => VIDEO_HS,
       csync_in => VIDEO_CS,
       pal => PAL,
-      colour_in => ATARI_COLOUR,
+      colour_in_r => COLOUR_R,
+      colour_in_g => COLOUR_G,
+      colour_in_b => COLOUR_G,
       VSYNC => VIDEO_VSYNC,
       HSYNC => VIDEO_HSYNC,
       B => VIDEO_B,
@@ -1075,8 +1080,6 @@ PORTA_gen:
   atari800 : entity work.atari800core
     GENERIC MAP (
       cycle_length => CYCLE_LENGTH,
-      video_bits => 8,
-      palette => 0,
       internal_ram => GENERIC_INTERNAL_RAM,
       freezer_debug => 1,
       sid => GENERIC_SID
@@ -1088,9 +1091,10 @@ PORTA_gen:
       VIDEO_VS => VIDEO_VS,
       VIDEO_HS => VIDEO_HS,
       VIDEO_CS => VIDEO_CS,
-      VIDEO_B => ATARI_COLOUR,
-      VIDEO_G => open,
-      VIDEO_R => open,
+      VIDEO_B => COLOUR_B,
+      VIDEO_G => COLOUR_G,
+      VIDEO_R => COLOUR_R,
+      GTIA_COLOUR => GTIA_COLOUR,
       VIDEO_BLANK => VIDEO_BLANK,
       VIDEO_BURST => VIDEO_BURST,
       VIDEO_START_OF_FIELD => open,
@@ -1462,8 +1466,8 @@ PORTA_gen:
     PORT MAP (
       CLK => clk,
       RESET_N => reset_n,
-      brightness => ATARI_COLOUR(3 downto 0),
-      hue => ATARI_COLOUR(7 downto 4),
+      brightness => GTIA_COLOUR(3 downto 0),
+      hue => GTIA_COLOUR(7 downto 4),
       burst => VIDEO_BURST,
       blank => VIDEO_BLANK,
       sof => VIDEO_VS,
@@ -1488,7 +1492,9 @@ PORTA_gen:
       csync_on => csync,
       format => scandoubler_format,
       colour_enable => half_scandouble_enable_reg,
-      colour_in => atari_colour,
+      colour_in_r => colour_r,
+      colour_in_g => colour_g,
+      colour_in_b => colour_b,
       vsync_in => VIDEO_VS,
       hsync_in => VIDEO_HS,
       CLK_HDMI_IN => CLK_HDMI_IN,
