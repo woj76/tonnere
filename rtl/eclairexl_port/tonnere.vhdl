@@ -864,6 +864,9 @@ begin
   -- TODO(tonnere): PORTA/PORTB are the PIA ports; on Tonnere the joystick
   -- direction lines map to PIA PORTA. Wire real mapping once confirmed.
   -- For now: drive PIA PORTA from JOY_DIR, PORTB left internal.
+  -- Note (woj): a good test to see if it all done right is to run Misja / Mission Shark
+  -- (the original ATX version, as it is the loader that does weird things, not
+  -- the game itself)
   ---------------------------------------------------------------------------
 PORTA_gen:
   for I in 0 to 7 generate
